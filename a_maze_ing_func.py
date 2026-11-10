@@ -1,0 +1,109 @@
+import random
+
+def parsing_info(file: str) -> dict:
+    param= {}
+
+    with open(file, "r") as file:
+        for line in file:
+            key, value = line.strip().split("=")
+            param[key] = value
+    return param
+    
+def parsing_verif() -> bool:
+    info = parsing_info("config.txt")
+    if int(info["WIDTH"]) < 8:
+        return False
+    if int(info["HEIGHT"]) < 5:
+        return False
+    if info["OUTPUT_FILE"] is NULL:
+        return False
+    entry_x, entry_y = info["ENTRY"].split(",")
+    exit_x, exit_y = info["EXIT"].split(",")
+    entry_x, entry_y = int(entry_x), int(entry_y)
+    exit_x, exit_y = int(exit_x), int(exit_y)
+
+    if entry_x < 0 or entry_x >= int(info["WIDTH"]):
+        return False
+    if entry_y < 0 or entry_y >= int(info["HEIGHT"]):
+        return False
+
+    if exit_x < 0 or exit_x >= int(info["WIDTH"]):
+        return False
+    if exit_y < 0 or exit_y >= int(info["HEIGHT"]):
+        return False
+    return True
+
+def perfect_verif() -> bool:
+    info = parsing_info("config.txt")
+    if info["PERFECT"].lower() is "True":
+        return True
+    else:
+        return False
+
+class Cell():
+    def __init__(self):
+        self.zone: int = 0
+        self.north = True
+        self.est = True
+        self.south = True
+        self.west = True
+        self.forty_two = False
+
+def cell_factory(i: int) -> object:
+    cell = Cell()
+    cell.zone = i
+    return cell
+
+
+def matrice_init(length: int, height: int) -> list[list]:
+    matrice: list[list] = []
+    zone: int = 0
+    for i in range(height):
+        temp_list: list = []
+        for e in range(length):
+            temp_cell = cell_factory(zone)
+            temp_list.append(temp_cell)
+            zone += 1
+        matrice.append(temp_list)
+    return matrice
+
+def zone_filler(matrice: list[list], n1: int, n2: int) -> list[list]:
+    for ligne in matrice:
+        for cell in ligne:
+            if cell.zone == n1:
+                cell.zone = n2
+    return matrice
+
+
+def maze_verifying(matrice: list[list]) -> list[list]:
+    i = matrice[0][0].zone
+    for ligne in matrice:
+        for cell in ligne:
+            if cell.zone != i:
+                return False
+    return True
+
+
+def n_remover(matrice: list[list], x: int, y: int) -> list[list]:
+    matrice[y][x].north = False
+    matrice[y-1][x].south = False
+    return matrice
+
+
+def s_remover(matrice: list[list], x: int, y: int) -> list[list]:
+    matrice[y][x].south = False
+    matrice[y+1][x].north = False
+    return matrice
+
+
+def e_remover(matrice: list[list], x: int, y: int) -> list[list]:
+    matrice[y][x].est = False
+    matrice[y][x+1].west = False
+    return matrice
+
+
+def w_remover(matrice: list[list], x: int, y: int) -> list[list]:
+    matrice[y][x].west = False
+    matrice[y][x-1].est = False
+    return matrice
+
