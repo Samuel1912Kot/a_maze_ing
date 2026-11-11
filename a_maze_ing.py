@@ -3,6 +3,7 @@ from a_maze_ing_func import (n_remover, s_remover, e_remover, w_remover, matrice
                              Cell, cell_factory, zone_filler, maze_verifying, parsing_info,
                              parsing_verif, perfect_verif)
 from a_maze_ing_unperfect import unperfect_maker
+from forty_two_logo import forty_two_logo
 
 
 def wall_finder(matrice: list[list]) -> list[list]:
@@ -38,35 +39,57 @@ def wall_finder(matrice: list[list]) -> list[list]:
     return matrice
     
 
+
 def maze_printer(matrice: list[list]) -> None:
-    # Afficher le haut du labyrinthe
+    if not matrice or not matrice[0]:
+        return
+
+    # Bord supérieur
     for cell in matrice[0]:
-        print("o---", end="")
+        if cell.forty_two:
+            print("████", end="")
+        else:
+            print("o---" if cell.north else "o   ", end="")
     print("o")
 
-    for y, ligne in enumerate(matrice):
-        # Afficher les cellules et leurs murs ouest/est
+    for ligne in matrice:
+        # Partie supérieure des cellules
         for cell in ligne:
-            print("|" if cell.west else " ", end="")
-            print("   ", end="")
-        print("|" if ligne[-1].est else " ")
+            if cell.forty_two:
+                print("████", end="")
+            else:
+                print("|   " if cell.west else "    ", end="")
 
-        # Afficher les murs sud de chaque cellule
+        if not ligne[-1].forty_two:
+            print("|" if ligne[-1].est else " ", end="")
+        else:
+            print(" ", end="")
+        print()
+
+        # Partie inférieure des cellules
         for cell in ligne:
-            print("o---" if cell.south else "o   ", end="")
+            if cell.forty_two:
+                print("████", end="")
+            else:
+                print("o---" if cell.south else "o   ", end="")
         print("o")
 
 
-def a_maze_ing(length: int, height: int):
+def a_maze_ing():
     matrice = [[]]
-    matrice = matrice_init(length, height)
-    while maze_verifying(matrice) != True:
-        matrice = wall_finder(matrice)
-    if perfect_verif() is True:
-        return matrice
-    else:
-        matrice = unperfect_maker(matrice)
-        return matrice
+    info = parsing_info("config.txt")
+    
+    if parsing_verif() is True:
+        matrice = matrice_init(int(info["WIDTH"]), int(info["HEIGHT"]))
+        while maze_verifying(matrice) != True:
+            matrice = wall_finder(matrice)
+        if perfect_verif() == True:
+            matrice = forty_two_logo(matrice)
+            return matrice
+        else:
+            matrice = unperfect_maker(matrice)
+            matrice = forty_two_logo(matrice)
+            return matrice
 
 if __name__ == "__main__":
-    maze_printer(a_maze_ing(30, 30))
+    maze_printer(a_maze_ing())

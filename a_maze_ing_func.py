@@ -11,31 +11,41 @@ def parsing_info(file: str) -> dict:
     
 def parsing_verif() -> bool:
     info = parsing_info("config.txt")
-    if int(info["WIDTH"]) < 8:
-        return False
-    if int(info["HEIGHT"]) < 5:
-        return False
-    if info["OUTPUT_FILE"] is NULL:
-        return False
-    entry_x, entry_y = info["ENTRY"].split(",")
-    exit_x, exit_y = info["EXIT"].split(",")
-    entry_x, entry_y = int(entry_x), int(entry_y)
-    exit_x, exit_y = int(exit_x), int(exit_y)
+    try:
+        if int(info["WIDTH"]) < 8:
+            return False
+        if int(info["HEIGHT"]) < 5:
+            return False
+    except TypeError as e:
+        return print(f"{e}")
+    
+    if info["OUTPUT_FILE"].strip() is "":
+        raise Exception("Output file parameter is missing")
+    try:
+        entry_x, entry_y = info["ENTRY"].split(",")
+        exit_x, exit_y = info["EXIT"].split(",")
+        entry_x, entry_y = int(entry_x), int(entry_y)
+        exit_x, exit_y = int(exit_x), int(exit_y)
 
-    if entry_x < 0 or entry_x >= int(info["WIDTH"]):
-        return False
-    if entry_y < 0 or entry_y >= int(info["HEIGHT"]):
-        return False
+        if entry_x < 0 or entry_x >= int(info["WIDTH"]):
+            return False
+        if entry_y < 0 or entry_y >= int(info["HEIGHT"]):
+            return False
 
-    if exit_x < 0 or exit_x >= int(info["WIDTH"]):
-        return False
-    if exit_y < 0 or exit_y >= int(info["HEIGHT"]):
-        return False
+        if exit_x < 0 or exit_x >= int(info["WIDTH"]):
+            return False
+        if exit_y < 0 or exit_y >= int(info["HEIGHT"]):
+            return False
+        if exit_y == entry_y and exit_x == exit_x:
+            return False
+    except Exception:
+        return print("The entry or exit point might be out of the maze, or juste wrong (check config.txt)") 
+    
     return True
 
 def perfect_verif() -> bool:
     info = parsing_info("config.txt")
-    if info["PERFECT"].lower() is "True":
+    if info["PERFECT"].lower() is "true":
         return True
     else:
         return False
