@@ -61,7 +61,6 @@ class Cell():
         self.west = True
         self.forty_two = False
         self.path = False
-        self.visited = False
 
 def cell_factory(i: int) -> object:
     cell = Cell()
