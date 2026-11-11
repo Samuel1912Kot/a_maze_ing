@@ -43,12 +43,14 @@ def parsing_verif() -> bool:
     
     return True
 
+
 def perfect_verif() -> bool:
     info = parsing_info("config.txt")
     if info["PERFECT"].lower() is "true":
         return True
     else:
         return False
+
 
 class Cell():
     def __init__(self):
@@ -58,6 +60,8 @@ class Cell():
         self.south = True
         self.west = True
         self.forty_two = False
+        self.path = False
+        self.visited = False
 
 def cell_factory(i: int) -> object:
     cell = Cell()
