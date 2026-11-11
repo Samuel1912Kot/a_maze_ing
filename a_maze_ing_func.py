@@ -8,18 +8,39 @@ def parsing_info(file: str) -> dict:
             key, value = line.strip().split("=")
             param[key] = value
     return param
-    
+
+def parsing_info(filename: str) -> dict:
+    param = {}
+
+    with open(filename, "r") as file:
+        for line in file:
+            line = line.strip()
+            if not line:
+                continue
+            key, value = line.split("=", 1)
+            param[key.strip()] = value.strip()
+    return param
+
+
 def parsing_verif() -> bool:
     info = parsing_info("config.txt")
+    keys = ["WIDTH", "HEIGHT", "ENTRY", "EXIT",
+                 "OUTPUT_FILE", "PERFECT"]
+    for key in keys:
+        if key not in info:
+            return False
     try:
-        if int(info["WIDTH"]) < 8:
+        width = int(info["WIDTH"])
+        height = int(info["HEIGHT"])
+        if width < 8:
             return False
-        if int(info["HEIGHT"]) < 5:
+        if height < 5:
             return False
-    except TypeError as e:
-        return print(f"{e}")
-    
-    if info["OUTPUT_FILE"].strip() is "":
+    except ValueError as e:
+        print(f"{e}")
+        return False
+
+    if info["OUTPUT_FILE"].strip() == "":
         raise Exception("Output file parameter is missing")
     try:
         entry_x, entry_y = info["ENTRY"].split(",")
@@ -27,22 +48,22 @@ def parsing_verif() -> bool:
         entry_x, entry_y = int(entry_x), int(entry_y)
         exit_x, exit_y = int(exit_x), int(exit_y)
 
-        if entry_x < 0 or entry_x >= int(info["WIDTH"]):
+        if entry_x < 0 or entry_x >= width:
             return False
-        if entry_y < 0 or entry_y >= int(info["HEIGHT"]):
+        if entry_y < 0 or entry_y >= height:
             return False
 
-        if exit_x < 0 or exit_x >= int(info["WIDTH"]):
+        if exit_x < 0 or exit_x >= width:
             return False
-        if exit_y < 0 or exit_y >= int(info["HEIGHT"]):
+        if exit_y < 0 or exit_y >= height:
             return False
-        if exit_y == entry_y and exit_x == exit_x:
+        if exit_y == entry_y and exit_x == entry_x:
             return False
     except Exception:
-        return print("The entry or exit point might be out of the maze, or juste wrong (check config.txt)") 
-    
+        print("The entry or exit point might be out of the maze, or juste wrong (check config.txt)") 
+        return False
     return True
-
+    
 
 def perfect_verif() -> bool:
     info = parsing_info("config.txt")

@@ -87,8 +87,8 @@ def a_maze_ing():
             matrice = forty_two_logo(matrice)
             return matrice
         else:
-            matrice = unperfect_maker(matrice)
             matrice = forty_two_logo(matrice)
+            matrice = unperfect_maker(matrice)
             return matrice
 
 if __name__ == "__main__":
