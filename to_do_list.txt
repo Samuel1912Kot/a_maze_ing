@@ -2,7 +2,8 @@ parsing complet:
 	- Finir les dernier detail pour que tout ce fasse etape par etape sans crash et en fonction du config file
 	- Fair les derniere mini verif sur le config file avant de lancer la generation
 
-algorithme Kruskal complet: Fini
+algorithme Kruskal complet: 
+	- Fini
 
 seed:
 	- Fair la fonction
@@ -13,4 +14,11 @@ path_finding:
 
 42 au millieu: Fini
 
-test finaux: A fair
+Hexadecimal:
+	- Fair la fonction qui recuperer les info du labyrinthe et la transforme en une suite hexadecimals
+
+README: 
+	- A fair
+
+test finaux: 
+	- A fair
