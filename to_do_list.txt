@@ -9,7 +9,7 @@ seed:
 	- Fair la fonction
 
 path_finding:
-	- Fair une fonction pour recuperer le path et changer le .path des cellule qui le constitue pour l'affichage
+	- Fair une fonction pour recuperer le path et changer le .path des cellule qui le constitue pour l'affichage: Fait
 	- Fair des tests avec plein de cas
 
 42 au millieu: Fini

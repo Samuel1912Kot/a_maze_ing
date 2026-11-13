@@ -1,14 +1,5 @@
 import random
 
-def parsing_info(file: str) -> dict:
-    param= {}
-
-    with open(file, "r") as file:
-        for line in file:
-            key, value = line.strip().split("=")
-            param[key] = value
-    return param
-
 def parsing_info(filename: str) -> dict:
     param = {}
 
@@ -33,8 +24,10 @@ def parsing_verif() -> bool:
         width = int(info["WIDTH"])
         height = int(info["HEIGHT"])
         if width < 8:
+            print("Width is too low (min 8)")
             return False
         if height < 5:
+            print("Height is too low (min 5)")
             return False
     except ValueError as e:
         print(f"{e}")
@@ -67,7 +60,7 @@ def parsing_verif() -> bool:
 
 def perfect_verif() -> bool:
     info = parsing_info("config.txt")
-    if info["PERFECT"].lower() is "true":
+    if info["PERFECT"].lower() == "true":
         return True
     else:
         return False
@@ -113,6 +106,8 @@ def maze_verifying(matrice: list[list]) -> list[list]:
     i = matrice[0][0].zone
     for ligne in matrice:
         for cell in ligne:
+            if cell.forty_two:
+                continue
             if cell.zone != i:
                 return False
     return True

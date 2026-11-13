@@ -1,5 +1,4 @@
 from a_maze_ing_func import parsing_info
-from collections import deque
 
 
 def is_move_possible(matrice: list[list], x: int, y: int, direction: str) -> bool:
@@ -39,19 +38,13 @@ def is_move_possible(matrice: list[list], x: int, y: int, direction: str) -> boo
         return False
 
 
-
-def bfs(matrice: list[list], entry_cord: tuple, exit_cord: tuple):
-
+def bfs(matrice: list[list], entry_cord: tuple, exit_cord: tuple) -> list[list]:
     queue = [entry_cord]
     visited = [entry_cord]
     previous = {}
-
     directions = ["N", "S", "E", "W"]
-
     while queue:
-
         x, y = queue.pop(0)
-
         if (x, y) == exit_cord:
             break
 
@@ -82,4 +75,21 @@ def bfs(matrice: list[list], entry_cord: tuple, exit_cord: tuple):
     path.append(entry_cord)
     path.reverse()
     return path
+
+
+def path_inscriptor(matrice: list[list], path: list[tuple]) -> list[list]:
+    for coord in path:
+        x, y = coord
+        matrice[y][x].path = True
+    return matrice
+
+
+
+
+
+
+
+
+
+
 
