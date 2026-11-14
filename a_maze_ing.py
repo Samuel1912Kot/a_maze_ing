@@ -3,8 +3,9 @@ from a_maze_ing_func import (n_remover, s_remover, e_remover, w_remover, matrice
                              Cell, cell_factory, zone_filler, maze_verifying, parsing_info,
                              parsing_verif, perfect_verif)
 from a_maze_ing_unperfect import unperfect_maker
-from forty_two_logo import forty_two_logo
+from forty_two_logo import forty_two_logo, forty_two_list
 from a_maze_ing_path_finding import path_inscriptor, bfs
+from hexadecimal_converter import hexadecimal_converter, path_converter
 
 
 def wall_finder(matrice: list[list]) -> list[list]:
@@ -90,8 +91,7 @@ def maze_printer(matrice: list[list]) -> None:
         print("o")
 
 
-def a_maze_ing():
-    matrice = [[]]
+def a_maze_ing() -> list[list]:
     info = parsing_info("config.txt")
     entry_cord = tuple(map(int, info["ENTRY"].split(",")))
     exit_cord = tuple(map(int, info["EXIT"].split(",")))
@@ -99,17 +99,26 @@ def a_maze_ing():
     if parsing_verif() is True:
         matrice = matrice_init(int(info["WIDTH"]), int(info["HEIGHT"]))
         matrice = forty_two_logo(matrice)
+        forty_two_cell = forty_two_list(matrice)
+        if entry_cord in forty_two_cell:
+            raise ValueError("ENTRY is inside the 42 logo")
+        if exit_cord in forty_two_cell:
+            raise ValueError("EXIT is inside the 42 logo")
+        
         while maze_verifying(matrice) != True:
             matrice = wall_finder(matrice)
         if perfect_verif() == True:
             path = bfs(matrice, entry_cord, exit_cord)
             matrice = path_inscriptor(matrice, path)
+            print(path_converter(matrice, entry_cord, exit_cord))
             return matrice
         else:
             matrice = unperfect_maker(matrice)
             path = bfs(matrice, entry_cord, exit_cord)
             matrice = path_inscriptor(matrice, path)
+            print(path_converter(matrice, entry_cord, exit_cord))
             return matrice
+
 
 if __name__ == "__main__":
     maze_printer(a_maze_ing())

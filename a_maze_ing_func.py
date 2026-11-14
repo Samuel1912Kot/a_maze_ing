@@ -1,62 +1,92 @@
 import random
 
-def parsing_info(filename: str) -> dict:
+
+def parsing_info(file: str) -> dict:
     param = {}
 
-    with open(filename, "r") as file:
+    with open(file, "r") as file:
         for line in file:
             line = line.strip()
-            if not line or line[0] == "#":
+
+            if not line or line.startswith("#"):
                 continue
+
+            if "=" not in line:
+                raise ValueError(f"Invalid config line: {line}")
+
             key, value = line.split("=", 1)
-            param[key.strip()] = value.strip()
+            key = key.strip()
+            value = value.strip()
+
+            if not key or not value:
+                raise ValueError(f"Invalid config line: {line}")
+
+            if key in param:
+                raise ValueError(f"Duplicate key: {key}")
+
+            param[key] = value
+
     return param
 
 
 def parsing_verif() -> bool:
-    info = parsing_info("config.txt")
+    try:
+        info = parsing_info("config.txt")
+    except (OSError, ValueError) as e:
+        print(f"Config file error: {e}")
+        return False
     keys = ["WIDTH", "HEIGHT", "ENTRY", "EXIT",
-                 "OUTPUT_FILE", "PERFECT"]
+            "OUTPUT_FILE", "PERFECT"]
+
     for key in keys:
         if key not in info:
+            print(f"Missing parameter: {key}")
             return False
     try:
         width = int(info["WIDTH"])
         height = int(info["HEIGHT"])
         if width < 8:
             print("Width is too low (min 8)")
-            return False
+            return False 
         if height < 5:
             print("Height is too low (min 5)")
             return False
-    except ValueError as e:
-        print(f"{e}")
+    except ValueError:
+        print("WIDTH and HEIGHT must be integers")
         return False
 
+    if info["PERFECT"] not in ["True", "False"]:
+        print("PERFECT must be True or False")
+        return False
     if info["OUTPUT_FILE"].strip() == "":
-        raise Exception("Output file parameter is missing")
+        print("Output file parameter is missing")
+        return False
+
     try:
+        if len(info["ENTRY"].split(",")) != 2:
+            return False
+        if len(info["EXIT"].split(",")) != 2:
+            return False
         entry_x, entry_y = info["ENTRY"].split(",")
         exit_x, exit_y = info["EXIT"].split(",")
-        entry_x, entry_y = int(entry_x), int(entry_y)
-        exit_x, exit_y = int(exit_x), int(exit_y)
-
+        entry_x, entry_y = int(entry_x.strip()), int(entry_y.strip())
+        exit_x, exit_y = int(exit_x.strip()), int(exit_y.strip())
         if entry_x < 0 or entry_x >= width:
-            return False
+            raise ValueError("Entry X coordinate is outside the maze boundaries")
         if entry_y < 0 or entry_y >= height:
-            return False
-
+            raise ValueError("Entry Y coordinate is outside the maze boundaries")
         if exit_x < 0 or exit_x >= width:
-            return False
+            raise ValueError("Exit X coordinate is outside the maze boundaries")
         if exit_y < 0 or exit_y >= height:
-            return False
-        if exit_y == entry_y and exit_x == entry_x:
-            return False
-    except Exception:
-        print("The entry or exit point might be out of the maze, or juste wrong (check config.txt)") 
+            raise ValueError("Exit Y coordinate is outside the maze boundaries")
+        if (entry_x, entry_y) == (exit_x, exit_y):
+            raise ValueError("Entry and exit coordinates cannot be the same")
+
+    except ValueError as e:
+        print(f"{e} \n(check config.txt)")
         return False
     return True
-    
+
 
 def perfect_verif() -> bool:
     info = parsing_info("config.txt")

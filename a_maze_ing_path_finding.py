@@ -78,6 +78,8 @@ def bfs(matrice: list[list], entry_cord: tuple, exit_cord: tuple) -> list[list]:
 
 
 def path_inscriptor(matrice: list[list], path: list[tuple]) -> list[list]:
+    if path is None:
+        raise ValueError("Impossible de trouver un chemin entre ENTRY et EXIT")
     for coord in path:
         x, y = coord
         matrice[y][x].path = True

@@ -1,5 +1,5 @@
 import random
-from a_maze_ing_func import perfect_verif
+
 
 def forty_two_logo(matrice: list[list]) -> list[list]:
     y = len(matrice) // 2
@@ -27,28 +27,6 @@ def forty_two_logo(matrice: list[list]) -> list[list]:
     matrice[y + 2][x + 2].forty_two = True
     matrice[y + 2][x + 3].forty_two = True
     
-    matrice[y][x].north = False
-    matrice[y][x].south = False
-    matrice[y][x].est = False
-    matrice[y][x].west = False
-   
-
-    if perfect_verif() != True:
-        matrice[y - 1][x].north = False
-        matrice[y - 1][x].south = False
-        matrice[y - 1][x].est = False
-        matrice[y - 1][x].west = False
-
-        matrice[y + 1][x].north = False
-        matrice[y + 1][x].south = False
-        matrice[y + 1][x].est = False
-        matrice[y + 1][x].west = False
-
-        matrice[y + 2][x].north = False
-        matrice[y + 2][x].south = False
-        matrice[y + 2][x].est = False
-        matrice[y + 2][x].west = False
-
     for ligne in matrice:
         for cell in ligne:
             if cell.forty_two == True:
@@ -58,3 +36,13 @@ def forty_two_logo(matrice: list[list]) -> list[list]:
                 cell.est = True
                 cell.est = True
     return matrice
+
+
+def forty_two_list(matrice: list[list]) -> list[tuple]:
+    coordinates = []
+
+    for y, ligne in enumerate(matrice):
+        for x, cell in enumerate(ligne):
+            if cell.forty_two:
+                coordinates.append((x, y))
+    return coordinates
