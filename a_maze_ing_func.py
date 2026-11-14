@@ -6,7 +6,7 @@ def parsing_info(filename: str) -> dict:
     with open(filename, "r") as file:
         for line in file:
             line = line.strip()
-            if not line:
+            if not line or line[0] == "#":
                 continue
             key, value = line.split("=", 1)
             param[key.strip()] = value.strip()
