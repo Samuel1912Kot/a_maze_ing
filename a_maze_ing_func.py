@@ -1,8 +1,8 @@
 def parsing_info(file: str) -> dict:
     param = {}
 
-    with open(file, "r") as file:
-        for line in file:
+    with open(file, "r") as config_file:
+        for line in config_file:
             line = line.strip()
 
             if not line or line.startswith("#"):
@@ -131,7 +131,7 @@ def zone_filler(matrice: list[list], n1: int, n2: int) -> list[list]:
     return matrice
 
 
-def maze_verifying(matrice: list[list]) -> list[list]:
+def maze_verifying(matrice: list[list]) -> bool:
     i = matrice[0][0].zone
     for ligne in matrice:
         for cell in ligne:

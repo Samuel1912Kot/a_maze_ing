@@ -91,7 +91,7 @@ def maze_printer(matrice: list[list]) -> None:
         print("o")
 
 
-def a_maze_ing() -> list[list]:
+def a_maze_ing():
     info = parsing_info("config.txt")
     entry_cord = tuple(map(int, info["ENTRY"].split(",")))
     exit_cord = tuple(map(int, info["EXIT"].split(",")))

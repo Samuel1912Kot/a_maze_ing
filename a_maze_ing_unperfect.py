@@ -1,8 +1,8 @@
-from a_maze_ing_func import n_remover, s_remover, e_remover, w_remover
+from a_maze_ing_func import n_remover, s_remover, e_remover, w_remover, Cell
 import random
 
 
-def cell_wall_count(cell: object) -> int:
+def cell_wall_count(cell: Cell) -> int:
     wall_count: int = 0
     if cell.north is True:
         wall_count += 1
