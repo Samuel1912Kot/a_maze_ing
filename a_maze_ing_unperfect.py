@@ -18,27 +18,29 @@ def cell_wall_count(cell: Cell) -> int:
 def unperfect_maker(matrice: list[list]) -> list[list]:
     for line in range(len(matrice)):
         for c in range(len(matrice[line])):
-
-            if cell_wall_count(matrice[line][c]) == 3:
-                while True:
-                    random_break = random.randint(0, 3)
+            cell = matrice[line][c]
+            if cell.forty_two is False and cell_wall_count(cell) == 3:
+                possible_breaks = []
+                if line > 0:
+                    if cell.north and not matrice[line - 1][c].forty_two:
+                        possible_breaks.append(0)
+                if line < len(matrice) - 1:
+                    if cell.south and not matrice[line + 1][c].forty_two:
+                        possible_breaks.append(1)
+                if c > 0:
+                    if cell.west and not matrice[line][c - 1].forty_two:
+                        possible_breaks.append(2)
+                if c < len(matrice[line]) - 1:
+                    if cell.est and not matrice[line][c + 1].forty_two:
+                        possible_breaks.append(3)
+                if possible_breaks:
+                    random_break = random.choice(possible_breaks)
                     if random_break == 0:
-                        if line > 0 and matrice[line][c].north:
-                            matrice = n_remover(matrice, c, line)
-                            break
-
+                        matrice = n_remover(matrice, c, line)
                     elif random_break == 1:
-                        if line < len(matrice) - 1 and matrice[line][c].south:
-                            matrice = s_remover(matrice, c, line)
-                            break
-
+                        matrice = s_remover(matrice, c, line)
                     elif random_break == 2:
-                        if c > 0 and matrice[line][c].west:
-                            matrice = w_remover(matrice, c, line)
-                            break
-
+                        matrice = w_remover(matrice, c, line)
                     elif random_break == 3:
-                        if c < len(matrice[line]) - 1 and matrice[line][c].est:
-                            matrice = e_remover(matrice, c, line)
-                            break
+                        matrice = e_remover(matrice, c, line)
     return matrice

@@ -62,7 +62,7 @@ def bfs(matrice: list[list], entry_cor: tuple, exit_cor: tuple):
                     queue.append(voisin)
 
     if exit_cor not in visited:
-        return 
+        return
     path = []
     current = exit_cor
 

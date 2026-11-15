@@ -1,11 +1,12 @@
 from a_maze_ing_func import parsing_info
 # mypy: ignore-errors
 
+
 def hexadecimal_converter(cell) -> str:
     value: int = 0
 
     if cell.forty_two:
-        return "X"
+        return "F"
     if cell.north:
         value |= 1 << 0
     if cell.est:
@@ -45,7 +46,7 @@ def is_move_possible(matrice: list[list], x: int, y: int, dire: str) -> bool:
     return False
 
 
-def path_converter(matrice: list[list], entry_c: tuple, exit_c: tuple) -> str: # mypy: ignore-errors
+def path_converter(matrice: list[list], entry_c: tuple, exit_c: tuple) -> str:
     path: str = ""
     x, y = map(int, entry_c.split(","))
     fx, fy = map(int, exit_c.split(","))
