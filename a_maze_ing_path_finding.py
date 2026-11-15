@@ -1,26 +1,23 @@
-from a_maze_ing_func import parsing_info
-
-
-def is_move_possible(matrice: list[list], x: int, y: int, direction: str) -> bool:
+def is_move_possible(mat: list[list], x: int, y: int, direction: str) -> bool:
     if direction == "N":
         if y != 0:
-            if matrice[y][x].north is False and matrice[y - 1][x].south is False:
+            if mat[y][x].north is False and mat[y - 1][x].south is False:
                 return True
             else:
                 return False
         else:
             return False
     elif direction == "S":
-        if y != len(matrice) - 1:
-            if matrice[y][x].south is False and matrice[y + 1][x].north is False:
+        if y != len(mat) - 1:
+            if mat[y][x].south is False and mat[y + 1][x].north is False:
                 return True
             else:
                 return False
         else:
             return False
     elif direction == "E":
-        if x != len(matrice[y]) - 1:
-            if matrice[y][x].est is False and matrice[y][x + 1].west is False:
+        if x != len(mat[y]) - 1:
+            if mat[y][x].est is False and mat[y][x + 1].west is False:
                 return True
             else:
                 return False
@@ -28,7 +25,7 @@ def is_move_possible(matrice: list[list], x: int, y: int, direction: str) -> boo
             return False
     elif direction == "W":
         if x != 0:
-            if matrice[y][x].west is False and matrice[y][x - 1].est is False:
+            if mat[y][x].west is False and mat[y][x - 1].est is False:
                 return True
             else:
                 return False
@@ -38,14 +35,14 @@ def is_move_possible(matrice: list[list], x: int, y: int, direction: str) -> boo
         return False
 
 
-def bfs(matrice: list[list], entry_cord: tuple, exit_cord: tuple) -> list[list]:
-    queue = [entry_cord]
-    visited = [entry_cord]
+def bfs(matrice: list[list], entry_cor: tuple, exit_cor: tuple) -> list[list]:
+    queue = [entry_cor]
+    visited = [entry_cor]
     previous = {}
     directions = ["N", "S", "E", "W"]
     while queue:
         x, y = queue.pop(0)
-        if (x, y) == exit_cord:
+        if (x, y) == exit_cor:
             break
 
         for direction in directions:
@@ -64,15 +61,15 @@ def bfs(matrice: list[list], entry_cord: tuple, exit_cord: tuple) -> list[list]:
                     previous[voisin] = (x, y)
                     queue.append(voisin)
 
-    if exit_cord not in visited:
+    if exit_cor not in visited:
         return None
     path = []
-    current = exit_cord
+    current = exit_cor
 
-    while current != entry_cord:
+    while current != entry_cor:
         path.append(current)
         current = previous[current]
-    path.append(entry_cord)
+    path.append(entry_cor)
     path.reverse()
     return path
 
@@ -84,14 +81,3 @@ def path_inscriptor(matrice: list[list], path: list[tuple]) -> list[list]:
         x, y = coord
         matrice[y][x].path = True
     return matrice
-
-
-
-
-
-
-
-
-
-
-

@@ -1,11 +1,11 @@
 import random
-from a_maze_ing_func import (n_remover, s_remover, e_remover, w_remover, matrice_init, 
-                             Cell, cell_factory, zone_filler, maze_verifying, parsing_info,
-                             parsing_verif, perfect_verif)
+from a_maze_ing_func import (n_remover, s_remover, e_remover, w_remover,
+                             matrice_init, zone_filler, maze_verifying,
+                             parsing_info, parsing_verif, perfect_verif)
 from a_maze_ing_unperfect import unperfect_maker
 from forty_two_logo import forty_two_logo, forty_two_list
 from a_maze_ing_path_finding import path_inscriptor, bfs
-from hexadecimal_converter import hexadecimal_converter, path_converter
+from hexadecimal_converter import hexadecimal_file_creator
 
 
 def wall_finder(matrice: list[list]) -> list[list]:
@@ -43,7 +43,7 @@ def wall_finder(matrice: list[list]) -> list[list]:
                 matrice = e_remover(matrice, numero_case, numero_ligne)
                 matrice = zone_filler(matrice, voisin.zone, i.zone)
 
-    return matrice 
+    return matrice
 
 
 def maze_printer(matrice: list[list]) -> None:
@@ -104,19 +104,26 @@ def a_maze_ing() -> list[list]:
             raise ValueError("ENTRY is inside the 42 logo")
         if exit_cord in forty_two_cell:
             raise ValueError("EXIT is inside the 42 logo")
-        
-        while maze_verifying(matrice) != True:
+
+        max_attempts = int(info["WIDTH"]) * int(info["HEIGHT"]) * 50
+        count = 0
+
+        while maze_verifying(matrice) is not True:
+            if count >= max_attempts:
+                raise ValueError("Unable to generate a valid maze")
             matrice = wall_finder(matrice)
-        if perfect_verif() == True:
+            count += 1
+
+        if perfect_verif() is True:
             path = bfs(matrice, entry_cord, exit_cord)
             matrice = path_inscriptor(matrice, path)
-            print(path_converter(matrice, entry_cord, exit_cord))
+            hexadecimal_file_creator(matrice, info["OUTPUT_FILE"])
             return matrice
         else:
             matrice = unperfect_maker(matrice)
             path = bfs(matrice, entry_cord, exit_cord)
             matrice = path_inscriptor(matrice, path)
-            print(path_converter(matrice, entry_cord, exit_cord))
+            hexadecimal_file_creator(matrice, info["OUTPUT_FILE"])
             return matrice
 
 

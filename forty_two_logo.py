@@ -1,6 +1,3 @@
-import random
-
-
 def forty_two_logo(matrice: list[list]) -> list[list]:
     y = len(matrice) // 2
     x = len(matrice[y]) // 2
@@ -26,10 +23,10 @@ def forty_two_logo(matrice: list[list]) -> list[list]:
     matrice[y + 2][x + 1].forty_two = True
     matrice[y + 2][x + 2].forty_two = True
     matrice[y + 2][x + 3].forty_two = True
-    
+
     for ligne in matrice:
         for cell in ligne:
-            if cell.forty_two == True:
+            if cell.forty_two is True:
                 cell.north = True
                 cell.south = True
                 cell.west = True

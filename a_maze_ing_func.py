@@ -1,6 +1,3 @@
-import random
-
-
 def parsing_info(file: str) -> dict:
     param = {}
 
@@ -47,7 +44,7 @@ def parsing_verif() -> bool:
         height = int(info["HEIGHT"])
         if width < 8:
             print("Width is too low (min 8)")
-            return False 
+            return False
         if height < 5:
             print("Height is too low (min 5)")
             return False
@@ -72,13 +69,13 @@ def parsing_verif() -> bool:
         entry_x, entry_y = int(entry_x.strip()), int(entry_y.strip())
         exit_x, exit_y = int(exit_x.strip()), int(exit_y.strip())
         if entry_x < 0 or entry_x >= width:
-            raise ValueError("Entry X coordinate is outside the maze boundaries")
+            raise ValueError("Entry X coordinate is outside the maze limits")
         if entry_y < 0 or entry_y >= height:
-            raise ValueError("Entry Y coordinate is outside the maze boundaries")
+            raise ValueError("Entry Y coordinate is outside the maze limits")
         if exit_x < 0 or exit_x >= width:
-            raise ValueError("Exit X coordinate is outside the maze boundaries")
+            raise ValueError("Exit X coordinate is outside the maze limits")
         if exit_y < 0 or exit_y >= height:
-            raise ValueError("Exit Y coordinate is outside the maze boundaries")
+            raise ValueError("Exit Y coordinate is outside the maze limits")
         if (entry_x, entry_y) == (exit_x, exit_y):
             raise ValueError("Entry and exit coordinates cannot be the same")
 
@@ -106,6 +103,7 @@ class Cell():
         self.forty_two = False
         self.path = False
 
+
 def cell_factory(i: int) -> object:
     cell = Cell()
     cell.zone = i
@@ -123,6 +121,7 @@ def matrice_init(length: int, height: int) -> list[list]:
             zone += 1
         matrice.append(temp_list)
     return matrice
+
 
 def zone_filler(matrice: list[list], n1: int, n2: int) -> list[list]:
     for ligne in matrice:
@@ -165,4 +164,3 @@ def w_remover(matrice: list[list], x: int, y: int) -> list[list]:
     matrice[y][x].west = False
     matrice[y][x-1].est = False
     return matrice
-
