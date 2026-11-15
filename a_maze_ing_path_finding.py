@@ -35,7 +35,7 @@ def is_move_possible(mat: list[list], x: int, y: int, direction: str) -> bool:
         return False
 
 
-def bfs(matrice: list[list], entry_cor: tuple, exit_cor: tuple) -> list[list]:
+def bfs(matrice: list[list], entry_cor: tuple, exit_cor: tuple):
     queue = [entry_cor]
     visited = [entry_cor]
     previous = {}
@@ -62,7 +62,7 @@ def bfs(matrice: list[list], entry_cor: tuple, exit_cor: tuple) -> list[list]:
                     queue.append(voisin)
 
     if exit_cor not in visited:
-        return None
+        return 
     path = []
     current = exit_cor
 
