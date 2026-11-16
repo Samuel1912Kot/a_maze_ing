@@ -92,6 +92,13 @@ def parsing_verif() -> bool:
         except ValueError:
             raise ValueError("ENTRY and EXIT coordinates must be integers")
 
+        if entry_x < 0 or entry_x >= width or entry_y < 0 or entry_y >= height:
+            print("ENTRY coordinates are outside the maze boundaries")
+            return False
+        if exit_x < 0 or exit_x >= width or exit_y < 0 or exit_y >= height:
+            print("EXIT coordinates are outside the maze boundaries")
+            return False
+
     except ValueError as e:
         print(f"{e} \n(check {sys.argv[1]})")
         return False
