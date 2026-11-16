@@ -1,3 +1,5 @@
+import sys
+
 def parsing_info(file: str) -> dict:
     param = {}
 
@@ -28,10 +30,10 @@ def parsing_info(file: str) -> dict:
 
 def parsing_verif() -> bool:
     try:
-        info = parsing_info("config.txt")
+        info = parsing_info(sys.argv[1])
 
     except (OSError, ValueError) as e:
-        print(f"{e} \n(check config.txt)")
+        print(f"{e} \n(check {sys.argv[1]})")
         return False
 
     keys = ["WIDTH", "HEIGHT", "ENTRY", "EXIT",
@@ -90,7 +92,7 @@ def parsing_verif() -> bool:
             raise ValueError("ENTRY and EXIT coordinates must be integers")
 
     except ValueError as e:
-        print(f"{e} \n(check config.txt)")
+        print(f"{e} \n(check {sys.argv[1]})")
         return False
     return True
 

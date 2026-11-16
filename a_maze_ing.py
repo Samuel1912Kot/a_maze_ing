@@ -1,4 +1,5 @@
 import random
+import sys
 from a_maze_ing_func import (n_remover, s_remover, e_remover, w_remover,
                              matrice_init, zone_filler, maze_verifying,
                              parsing_info, parsing_verif, perfect_verif)
@@ -48,7 +49,7 @@ def wall_finder(matrice: list[list]) -> list[list]:
 
 
 def a_maze_ing():
-    info = parsing_info("config.txt")
+    info = parsing_info(sys.argv[1])
     random.seed(int(info["SEED"]) if info.get("SEED") else None)
     entry_cord = tuple(map(int, info["ENTRY"].split(",")))
     exit_cord = tuple(map(int, info["EXIT"].split(",")))
@@ -90,8 +91,8 @@ def a_maze_ing():
 
 
 if __name__ == "__main__":
-    info = parsing_info("config.txt")
     if parsing_verif() is True:
+        info = parsing_info("config.txt")
         entry_cord = tuple(map(int, info["ENTRY"].split(",")))
         exit_cord = tuple(map(int, info["EXIT"].split(",")))
         matrice = a_maze_ing()
