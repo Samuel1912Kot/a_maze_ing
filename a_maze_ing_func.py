@@ -15,7 +15,7 @@ def parsing_info(file: str) -> dict:
             key = key.strip()
             value = value.strip()
 
-            if not key or not value:
+            if not key or (not value and key != "SEED"):
                 raise ValueError(f"Invalid config line: {line}")
 
             if key in param:
@@ -29,9 +29,11 @@ def parsing_info(file: str) -> dict:
 def parsing_verif() -> bool:
     try:
         info = parsing_info("config.txt")
+
     except (OSError, ValueError) as e:
-        print(f"Config file error: {e}")
+        print(f"{e} \n(check config.txt)")
         return False
+
     keys = ["WIDTH", "HEIGHT", "ENTRY", "EXIT",
             "OUTPUT_FILE", "PERFECT"]
 
@@ -39,15 +41,24 @@ def parsing_verif() -> bool:
         if key not in info:
             print(f"Missing parameter: {key}")
             return False
+    if "SEED" in info and info["SEED"] != "":
+        try:
+            int(info["SEED"])
+
+        except ValueError:
+            print("SEED must be an integer")
+            return False
     try:
         width = int(info["WIDTH"])
         height = int(info["HEIGHT"])
+
         if width < 8:
             print("Width is too low (min 8)")
             return False
         if height < 5:
             print("Height is too low (min 5)")
             return False
+
     except ValueError:
         print("WIDTH and HEIGHT must be integers")
         return False
@@ -60,24 +71,23 @@ def parsing_verif() -> bool:
         return False
 
     try:
-        if len(info["ENTRY"].split(",")) != 2:
+        entry_values = info["ENTRY"].split(",")
+        exit_values = info["EXIT"].split(",")
+
+        if any(value.strip() == "" for value in entry_values):
+            print("ENTRY must contain exactly two coordinates (x, y)")
             return False
-        if len(info["EXIT"].split(",")) != 2:
+        if any(value.strip() == "" for value in exit_values):
+            print("EXIT must contain exactly two coordinates (x, y)")
             return False
-        entry_x, entry_y = info["ENTRY"].split(",")
-        exit_x, exit_y = info["EXIT"].split(",")
-        entry_x, entry_y = int(entry_x.strip()), int(entry_y.strip())
-        exit_x, exit_y = int(exit_x.strip()), int(exit_y.strip())
-        if entry_x < 0 or entry_x >= width:
-            raise ValueError("Entry X coordinate is outside the maze limits")
-        if entry_y < 0 or entry_y >= height:
-            raise ValueError("Entry Y coordinate is outside the maze limits")
-        if exit_x < 0 or exit_x >= width:
-            raise ValueError("Exit X coordinate is outside the maze limits")
-        if exit_y < 0 or exit_y >= height:
-            raise ValueError("Exit Y coordinate is outside the maze limits")
-        if (entry_x, entry_y) == (exit_x, exit_y):
-            raise ValueError("Entry and exit coordinates cannot be the same")
+
+        entry_x, entry_y = entry_values
+        exit_x, exit_y = exit_values
+        try:
+            entry_x, entry_y = int(entry_x.strip()), int(entry_y.strip())
+            exit_x, exit_y = int(exit_x.strip()), int(exit_y.strip())
+        except ValueError:
+            raise ValueError("ENTRY and EXIT coordinates must be integers")
 
     except ValueError as e:
         print(f"{e} \n(check config.txt)")

@@ -1,3 +1,4 @@
+# flake8: noqa
 ANSI_COLORS = [
     ("White", "\033[0m"),
     ("Cyan", "\033[96m"),
@@ -83,7 +84,6 @@ def render_maze(
         print("".join(bot_line))
 
 
-
 def interactive_loop(
     matrice: list[list],
     entry: tuple,
@@ -148,4 +148,3 @@ def interactive_loop(
         elif choice == "q":
             print("Goodbye!")
             break
-

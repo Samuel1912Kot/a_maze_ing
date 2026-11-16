@@ -6,8 +6,8 @@ from a_maze_ing_unperfect import unperfect_maker
 from forty_two_logo import forty_two_logo, forty_two_list
 from a_maze_ing_path_finding import path_inscriptor, bfs
 from hexadecimal_converter import hexadecimal_file_creator
-from terminal_display.display import (render_maze, ANSI_COLORS, 
-      LOGO_COLORS, interactive_loop)
+from terminal_display.display import interactive_loop
+
 
 def wall_finder(matrice: list[list]) -> list[list]:
     numero_ligne = random.randint(0, len(matrice) - 1)
@@ -49,6 +49,7 @@ def wall_finder(matrice: list[list]) -> list[list]:
 
 def a_maze_ing():
     info = parsing_info("config.txt")
+    random.seed(int(info["SEED"]) if info.get("SEED") else None)
     entry_cord = tuple(map(int, info["ENTRY"].split(",")))
     exit_cord = tuple(map(int, info["EXIT"].split(",")))
 
@@ -83,26 +84,25 @@ def a_maze_ing():
                 matrice = path_inscriptor(matrice, path)
             else:
                 raise ValueError("No path found between ENTRY and EXIT")
-        
+
         hexadecimal_file_creator(matrice, info["OUTPUT_FILE"])
         return matrice
 
 
 if __name__ == "__main__":
     info = parsing_info("config.txt")
+    if parsing_verif() is True:
+        entry_cord = tuple(map(int, info["ENTRY"].split(",")))
+        exit_cord = tuple(map(int, info["EXIT"].split(",")))
+        matrice = a_maze_ing()
 
-    entry_cord = tuple(map(int, info["ENTRY"].split(",")))
-    exit_cord = tuple(map(int, info["EXIT"].split(",")))
-    matrice = a_maze_ing()
-
-    interactive_loop(
-        matrice,
-        entry_cord,
-        exit_cord,
-        info["OUTPUT_FILE"],
-        perfect_verif(),
-        int(info["WIDTH"]),
-        int(info["HEIGHT"]),
-        a_maze_ing
-        )
-
+        interactive_loop(
+            matrice,
+            entry_cord,
+            exit_cord,
+            info["OUTPUT_FILE"],
+            perfect_verif(),
+            int(info["WIDTH"]),
+            int(info["HEIGHT"]),
+            a_maze_ing
+            )
