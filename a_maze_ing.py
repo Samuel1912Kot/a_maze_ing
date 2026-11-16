@@ -6,7 +6,8 @@ from a_maze_ing_unperfect import unperfect_maker
 from forty_two_logo import forty_two_logo, forty_two_list
 from a_maze_ing_path_finding import path_inscriptor, bfs
 from hexadecimal_converter import hexadecimal_file_creator
-
+from terminal_display.display import (render_maze, ANSI_COLORS, 
+      LOGO_COLORS, interactive_loop)
 
 def wall_finder(matrice: list[list]) -> list[list]:
     numero_ligne = random.randint(0, len(matrice) - 1)
@@ -46,51 +47,6 @@ def wall_finder(matrice: list[list]) -> list[list]:
     return matrice
 
 
-def maze_printer(matrice: list[list]) -> None:
-    if not matrice or not matrice[0]:
-        return
-
-    # Bord supérieur
-    for cell in matrice[0]:
-        if cell.forty_two:
-            print("█████", end="")
-        else:
-            print("o----" if cell.north else "o    ", end="")
-    print("o")
-
-    for ligne in matrice:
-        # Partie supérieure des cellules
-        for cell in ligne:
-            if cell.forty_two:
-                print("█████", end="")
-            else:
-                print(("|" if cell.west else " ") + "    ", end="")
-
-        if not ligne[-1].forty_two:
-            print("|" if ligne[-1].est else " ", end="")
-        else:
-            print(" ", end="")
-        print()
-
-        # Chemin BFS
-        for cell in ligne:
-            if cell.forty_two:
-                print("█████", end="")
-            elif cell.path:
-                print("  *  ", end="")
-            else:
-                print("     ", end="")
-        print()
-
-        # Partie inférieure des cellules
-        for cell in ligne:
-            if cell.forty_two:
-                print("█████", end="")
-            else:
-                print("o----" if cell.south else "o    ", end="")
-        print("o")
-
-
 def a_maze_ing():
     info = parsing_info("config.txt")
     entry_cord = tuple(map(int, info["ENTRY"].split(",")))
@@ -116,16 +72,37 @@ def a_maze_ing():
 
         if perfect_verif() is True:
             path = bfs(matrice, entry_cord, exit_cord)
-            matrice = path_inscriptor(matrice, path)
-            hexadecimal_file_creator(matrice, info["OUTPUT_FILE"])
-            return matrice
+            if path is not None:
+                matrice = path_inscriptor(matrice, path)
+            else:
+                raise ValueError("No path found between ENTRY and EXIT")
         else:
             matrice = unperfect_maker(matrice)
             path = bfs(matrice, entry_cord, exit_cord)
-            matrice = path_inscriptor(matrice, path)
-            hexadecimal_file_creator(matrice, info["OUTPUT_FILE"])
-            return matrice
+            if path is not None:
+                matrice = path_inscriptor(matrice, path)
+            else:
+                raise ValueError("No path found between ENTRY and EXIT")
+        
+        hexadecimal_file_creator(matrice, info["OUTPUT_FILE"])
+        return matrice
 
 
 if __name__ == "__main__":
-    maze_printer(a_maze_ing())
+    info = parsing_info("config.txt")
+
+    entry_cord = tuple(map(int, info["ENTRY"].split(",")))
+    exit_cord = tuple(map(int, info["EXIT"].split(",")))
+    matrice = a_maze_ing()
+
+    interactive_loop(
+        matrice,
+        entry_cord,
+        exit_cord,
+        info["OUTPUT_FILE"],
+        perfect_verif(),
+        int(info["WIDTH"]),
+        int(info["HEIGHT"]),
+        a_maze_ing
+        )
+
