@@ -1,5 +1,6 @@
 import sys
 
+
 def parsing_info(file: str) -> dict:
     param = {}
 
